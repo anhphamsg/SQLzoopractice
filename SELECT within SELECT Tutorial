@@ -44,7 +44,7 @@ WHERE continent = 'Europe';
 --6. Which countries have a GDP greater than every country in Europe? [Give the name only.] (Some countries may have NULL gdp values)
 SELECT name
   FROM world
-  WHERE (gdp >= ALL(SELECT gdp FROM world 
+  WHERE gdp >= ALL(SELECT gdp FROM world 
           WHERE gdp IS NOT NULL 
           AND continent = 'Europe'))  
   AND continent <> 'Europe';
@@ -89,3 +89,17 @@ WHERE
   name = (select min(name) from world where continent = 'South America')
 ORDER BY continent;
  
+  --------------------------------------------------------------------------------------------------------------------------------------
+/*
+9. Find the continents where all countries have a population <= 25000000. 
+Then find the names of the countries associated with these continents. Show name, continent and population.
+*/
+SELECT name,continent, population
+FROM world 
+WHERE continent IN
+                (SELECT continent FROM world
+                 GROUP BY continent 
+                 HAVING MAX(population) <= 25000000
+                );
+
+
